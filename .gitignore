@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Node (for docx-op/pptx tooling)
+node_modules/
+package-lock.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Generated files
+*.docx
+*.pptx
+*.xlsx
+*.pdf
+
+# Personal knowledge base entries (add your own)
+# .claude/skills/knowledge/references/concepts/
+# .claude/skills/knowledge/references/books/
+# .claude/skills/knowledge/references/articles/
