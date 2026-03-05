@@ -216,44 +216,29 @@ When processing any document into knowledge-base, add entry to `sources.md`:
 
 **Executable skills** (slash commands) live at `.claude/skills/`.
 
-### Research Operations
-| Skill | When to Use |
-|-------|-------------|
-| `/proposal` | Create and render research proposals (draft → iterate → Word or PPTX) |
-| `/screener` | Create and render recruitment screeners (draft → iterate → Word) |
-| `/dg` | Create and render discussion guides (draft → iterate → Word) |
-| `/meeting` | Process meeting notes into summaries, extract tasks, optional Word output |
-| `/transcript` | Process and render research transcripts to branded Word |
-| `/analysis-op` | Extract findings, insights, recommendations (markdown output) |
-
-### Transcript Analysis
-| Skill | When to Use |
-|-------|-------------|
-| `/transcript-analysis` | Analyze research transcripts |
-| `/synthesis` | Synthesize insights across sources |
-
 ### Project Management
 | Skill | When to Use |
 |-------|-------------|
 | `/project-setup` | Scaffold a new project directory |
 | `/project-ops` | Update project status pages |
+| `/meeting` | Process meeting notes into summaries, extract tasks, optional Word output |
 
 ### Document Operations
 | Skill | When to Use |
 |-------|-------------|
 | `/docx-op` | Word document engine (JSON spec → .docx, markdown → .docx) |
-| `/report` | Create and render research reports, oral debriefs, and SCQA narratives |
+| `/pptx` | PowerPoint creation and editing |
 | `/pdf` | PDF operations |
+| `/xlsx` | Spreadsheet operations |
 
-### Knowledge Base
+### Knowledge & Utilities
 | Skill | When to Use |
 |-------|-------------|
 | `/knowledge` | Search personal knowledge base |
-
-### Utilities
-| Skill | When to Use |
-|-------|-------------|
 | `/skill-creator` | Create new skills |
+
+### Domain Skills (add your own)
+Add industry-specific workflow skills here. Use the router pattern for methodology-heavy workflows.
 
 ---
 

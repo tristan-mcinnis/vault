@@ -1,12 +1,12 @@
 # vault
 
-A complete knowledge management and research operations system built on [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+A project management and knowledge system built on [Claude Code](https://docs.anthropic.com/en/docs/claude-code) that turns a folder of markdown files into an operating system for your work.
 
-This is the actual setup I use daily as a qualitative research consultant. It manages projects, generates branded deliverables, processes research transcripts, runs cross-source analysis, and maintains continuity across sessions — all from the terminal.
+I use this daily to manage client projects, generate branded documents, process meeting notes, and maintain continuity across sessions — all from the terminal. The domain-specific workflows (my industry skills) sit on top of this foundation. This repo is the foundation.
 
 ## What This Is
 
-A structured markdown directory that turns Claude Code into a domain-specific operating system. Instead of writing detailed prompts every session, the system's architecture — file structure, naming conventions, relationship rules, and 25 callable skills — provides the context. Claude reads the files, follows the rules, and produces consistent, high-quality output.
+A structured markdown directory that gives Claude Code persistent context, enforced rules, and callable workflows. Instead of re-explaining yourself every session, the architecture — file structure, naming conventions, relationship rules, and skills — provides the context automatically.
 
 **The core idea: engineer your file system, not your prompts.**
 
@@ -17,42 +17,29 @@ vault/
 ├── CLAUDE.md                        # Operating manual — Claude reads this first, always
 ├── .claude/
 │   ├── settings.json                # Hooks (automated behaviors)
-│   └── skills/                      # 25 callable workflows
-│       ├── analysis-op/             # Cross-source qualitative analysis
-│       │   ├── SKILL.md             # Lean router (~80 lines)
-│       │   └── rules/               # Atomic methodology files
-│       │       ├── frame-insight-levels.md
-│       │       ├── frame-strategic-choice.md
-│       │       ├── quality-insight-test.md
-│       │       └── ...
-│       ├── proposal/                # Research proposals → branded .docx
-│       ├── screener/                # Recruitment screeners
-│       ├── dg/                      # Discussion guides
-│       ├── transcript/              # Transcript processing + rendering
-│       ├── synthesis/               # Cross-source pattern synthesis
-│       ├── report/                  # Reports and oral debriefs
+│   └── skills/                      # Callable workflows
 │       ├── docx-op/                 # Document generation engine
 │       │   └── tools/               # TypeScript + Python toolchain
 │       ├── pptx/                    # PowerPoint generation
-│       ├── knowledge/               # Searchable personal knowledge base
+│       ├── pdf/                     # PDF operations
+│       ├── xlsx/                    # Spreadsheet operations
 │       ├── meeting/                 # Meeting note processing
 │       ├── project-setup/           # Project directory scaffolding
 │       ├── project-ops/             # Project status updates
-│       ├── skill-creator/           # Self-hosting: create new skills from within Claude
-│       └── ...
+│       ├── knowledge/               # Searchable personal knowledge base
+│       ├── skill-creator/           # Create new skills from within Claude
+│       └── {your-domain-skills}/    # ← Add your industry workflows here
 └── vault/                           # Markdown vault root
     ├── sessions/                    # Auto-generated session logs (YYYYMMDD.md)
     ├── current.md                   # Cross-project open threads tracker
     ├── Active-Projects.md           # Dashboard
     └── Databases/
-        ├── Projects/                # Active client work
+        ├── Projects/                # Active work
         │   ├── {project}/           # Directory-based projects
         │   │   ├── 00-status.md     # Source of truth
         │   │   ├── PROJECT.md       # Claude context for this project
         │   │   ├── knowledge-base/  # Project-specific knowledge
-        │   │   ├── transcripts/     # Research transcripts
-        │   │   ├── analysis/        # Findings, insights
-        │   │   └── reporting/       # Final deliverables
+        │   │   └── ...              # Your project subdirectories
         │   ├── personal/            # Non-client projects
         │   └── past-projects/       # Archived projects
         ├── Meetings/                # YYYYMMDD - Title.md
@@ -70,7 +57,7 @@ The `CLAUDE.md` file is 400+ lines of instructions that load before every sessio
 
 - **Who you are** and what you do
 - **How the vault is structured** — directories, naming conventions, relationships
-- **The rules** — bidirectional linking, content routing, source tracking
+- **The rules** — bidirectional linking, content routing by processing intent, source tracking
 - **How to find things** — search patterns, path conventions
 - **What skills are available** — a routing table mapping tasks to slash commands
 - **What NOT to do** — never save to Desktop, respect Context Loading directives
@@ -87,12 +74,12 @@ skill-name/
 └── rules/                # Atomic rule files (one concept each)
     ├── frame-*.md         # Output frameworks
     ├── quality-*.md       # Validation criteria
-    └── core-*.md          # Analytical patterns
+    └── core-*.md          # Patterns and heuristics
 ```
 
 **Why this works:**
 - Claude loads only the rules relevant to the current task (token efficiency)
-- Rules are reusable across skills (the evidence hierarchy works in analysis, synthesis, and reporting)
+- Rules are reusable across skills
 - Methodology evolves independently (update one rule, improve every skill that uses it)
 
 **Degrees of freedom** — match instruction specificity to task fragility:
@@ -101,6 +88,8 @@ skill-name/
 | High | Multiple valid approaches | Heuristics, text instructions |
 | Medium | Preferred pattern exists | Pseudocode, parameterized scripts |
 | Low | Fragile/critical operations | Exact scripts, specific sequences |
+
+This repo includes infrastructure skills (document generation, project management, meeting processing). You add your own domain skills on top — whatever workflows are specific to your industry.
 
 ### 3. Memory Loop (Session Continuity)
 
@@ -155,7 +144,7 @@ The `docx-op` skill ships a TypeScript + Python toolchain for generating branded
 - `ContentExtractor.ts` — Extract text/structure from .docx
 - `OoxmlManager.ts` — Raw OOXML manipulation
 
-Every research deliverable (proposal, screener, discussion guide, transcript, report) renders to branded output through this pipeline. No manual formatting. Client-ready from the terminal.
+Any skill you build can render its output through this pipeline. Write in markdown, deliver in .docx or .pptx with your branding.
 
 ### 5. Relationship Model
 
@@ -166,66 +155,60 @@ Artifacts  Documents
 ```
 
 Bidirectional links are enforced: when a meeting is linked to a project, both files are updated. Content is routed by **processing intent** — what happens next, not what it "is":
-- **Analyze for research insights** → `{project}/transcripts/consumer/` or `expert/` (feeds into analysis pipeline)
+- **Needs deep analysis** → project subdirectory (feeds into your domain skills)
 - **Summarize for decisions & actions** → `vault/Databases/Meetings/` (feeds into meeting processing)
 - **Extracted decisions** → `{project}/meeting-takeaways/`
 
 ### 6. Knowledge Base
 
-800+ searchable markdown files organized as:
+Searchable markdown files organized by type:
 - **Concepts** — atomic notes on ideas and frameworks
 - **Books** — key takeaways and applications
 - **Articles** — saved articles with annotations
-- **Professional frameworks** — business development, client management, leadership, marketing psychology
+- **Professional frameworks** — domain-specific reference material
 
-Searchable via `/knowledge`. Claude draws on your accumulated thinking rather than generic AI knowledge.
+Searchable via `/knowledge`. Claude draws on your accumulated thinking rather than generic AI knowledge. The knowledge base is empty in this repo — populate it with your own references.
 
-## Skills Reference
+## Skills Included
 
-### Research Operations
-| Skill | Purpose |
-|-------|---------|
-| `/proposal` | Draft and render research proposals (markdown → iterate → Word or PPTX) |
-| `/screener` | Recruitment screeners with hard-filter logic and bilingual support |
-| `/dg` | Discussion guides for IDIs, FGDs, triads |
-| `/transcript` | Process raw transcripts with speaker diarization → branded Word |
-| `/analysis-op` | Extract findings → map tensions → elevate insights → implications → recommendations |
-| `/synthesis` | Cross-source synthesis: corpus themes, consumer segments, expert takeaways |
-| `/report` | Research reports, oral debriefs, SCQA narrative summaries |
-
-### Document Generation
+### Infrastructure (included in this repo)
 | Skill | Purpose |
 |-------|---------|
 | `/docx-op` | Word document engine (markdown → .docx, JSON spec → .docx) |
 | `/pptx` | PowerPoint creation and editing |
 | `/pdf` | PDF operations |
 | `/xlsx` | Excel operations |
-
-### Project Management
-| Skill | Purpose |
-|-------|---------|
+| `/meeting` | Process meeting notes → summary, decisions, actions |
 | `/project-setup` | Scaffold new project directories |
 | `/project-ops` | Update project status pages |
-| `/meeting` | Process meeting notes → summary, decisions, actions |
-
-### Meta
-| Skill | Purpose |
-|-------|---------|
 | `/knowledge` | Search personal knowledge base |
 | `/skill-creator` | Create new skills from within Claude |
 
+### Domain Skills (add your own)
+
+The infrastructure above is domain-agnostic. On top of it, I run ~15 additional skills specific to my industry (primary research workflows — fieldwork planning, data collection, analysis, synthesis, reporting). Those aren't included here because they're specific to my work.
+
+**To add your own domain skills:**
+1. Use `/skill-creator` to scaffold a new skill
+2. Use the router pattern for methodology-heavy workflows
+3. Wire your skills into the document generation pipeline for branded output
+
+Examples of what domain skills might look like:
+- **Sales**: lead qualification → proposal generation → contract drafting
+- **Legal**: case research → brief drafting → filing preparation
+- **Product**: user research → spec writing → PRD generation
+- **Consulting**: data analysis → insight extraction → slide deck creation
+- **Content**: research → outline → draft → editing → publishing
+
 ## Getting Started
 
-### If you want to adapt this for your own work:
-
 1. **Fork this repo**
-2. **Edit `CLAUDE.md`** — replace my role/context with yours
-3. **Keep the structure** — the directory layout, naming conventions, and relationship model are domain-agnostic
-4. **Start with 3 things:**
+2. **Edit `CLAUDE.md`** — replace the role/context with yours
+3. **Start with 3 things:**
    - Your `CLAUDE.md` (who you are, how your files work, what rules to follow)
    - The `SessionEnd` hook (free continuity across sessions)
    - One skill for your most repeated workflow
-5. **Add skills as you identify repeated workflows** — use the router pattern for anything methodology-heavy
+4. **Add skills as you identify repeated workflows** — use the router pattern for anything methodology-heavy
 
 ### Minimum viable setup:
 
@@ -239,19 +222,28 @@ your-project/
 
 The CLAUDE.md alone — even without skills — will dramatically improve your Claude Code experience.
 
-## What's Redacted
+## What's Included vs. What's Not
 
-This is my actual production setup. The following have been removed:
-- Client project data and meeting notes
-- Personal knowledge base entries (concepts, books, articles)
-- Client names in example paths (replaced with generic examples)
-- Session logs and open threads
+**Included (the platform):**
+- Complete CLAUDE.md with project management rules, relationship model, naming conventions
+- Memory loop (SessionEnd hook + Session Start rule)
+- Document generation pipeline (Word, PowerPoint, PDF, Excel)
+- Project scaffolding and status management
+- Meeting processing
+- Knowledge base architecture
+- Skill creator (build new skills from within Claude)
 
-The architecture, skills, tooling, and methodology are all real and unmodified.
+**Not included (my domain layer):**
+- Industry-specific workflow skills (research planning, data collection, analysis, reporting)
+- Client project data
+- Personal knowledge base entries
+- Session logs
+
+The platform is domain-agnostic. The domain layer is where your industry expertise lives.
 
 ## Context
 
-I'm a Managing Partner at a qualitative research consultancy. This system handles the full project lifecycle: brief → proposal → recruitment → fieldwork → analysis → synthesis → reporting. The skills encode 15+ years of consulting methodology as loadable context.
+I run a consultancy focused on primary and secondary research. This system handles the full project lifecycle — from initial brief through fieldwork, analysis, and final deliverable. The infrastructure in this repo is what makes that possible, but the research-specific skills sit on top and aren't included here.
 
 Built on Claude Code (Anthropic's CLI). Not Claude Desktop, not the API directly — Claude Code with its file system access, hooks, and skill architecture.
 
