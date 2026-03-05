@@ -102,9 +102,11 @@ skill-name/
 | Medium | Preferred pattern exists | Pseudocode, parameterized scripts |
 | Low | Fragile/critical operations | Exact scripts, specific sequences |
 
-### 3. Automated Session Continuity
+### 3. Memory Loop (Session Continuity)
 
-Claude Code has no memory between sessions. The `SessionEnd` hook solves this:
+Claude Code has no built-in memory between sessions. This system creates a complete memory loop with two halves:
+
+**Write side — `SessionEnd` hook (automatic):**
 
 ```json
 // .claude/settings.json
@@ -126,7 +128,23 @@ When any session closes, it automatically:
 3. Updates `vault/current.md` (Waiting On / In Progress / To Revisit)
 4. Skips trivial sessions
 
-Result: perfect continuity across conversations with zero effort.
+**Read side — Session Start rule (in CLAUDE.md):**
+
+The CLAUDE.md includes a "Session Start" section that instructs Claude to read `current.md` and the latest session log **before doing anything else**. This closes the loop — the hook writes state, the rule reads it back.
+
+```
+Session ends → SessionEnd hook writes to sessions/ and current.md
+Session starts → CLAUDE.md rule reads current.md and latest session log
+```
+
+**Three memory layers in total:**
+| Layer | Scope | Mechanism |
+|-------|-------|-----------|
+| **Auto-memory** (`.claude/.../memory/MEMORY.md`) | User identity, preferences, stable patterns | Claude Code built-in — persists across sessions automatically |
+| **Session logs** (`vault/sessions/YYYYMMDD.md`) | What happened, when, in which project | SessionEnd hook writes, Session Start rule reads |
+| **Open threads** (`vault/current.md`) | Cross-project state: waiting, in progress, to revisit | SessionEnd hook writes, Session Start rule reads |
+
+Result: perfect continuity across conversations. The write side is automated. The read side is enforced by CLAUDE.md.
 
 ### 4. Document Generation Pipeline
 

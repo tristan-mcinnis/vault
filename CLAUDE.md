@@ -300,12 +300,20 @@ A `SessionEnd` hook automatically logs what was discussed when a session closes:
 
 ## For Claude
 
+### Session Start (Do This First)
+
+**Before doing anything else at the start of every session**, read these two files:
+1. **`vault/current.md`** — Cross-project open threads (what's waiting, in progress, to revisit)
+2. **`vault/sessions/`** — Check the most recent session log (`ls -t vault/sessions/ | head -1`, then read it) for context on where things left off
+
+This is non-negotiable. The SessionEnd hook writes continuity data; this step reads it. Without this, you lose cross-session context.
+
 ### Quick Start (Read in Order)
 
+Once session context is loaded, read project-specific files as needed:
 1. **`vault/Active-Projects.md`** — Current work at a glance
-2. **`vault/current.md`** — Cross-project open threads
-3. **`vault/Databases/Projects/{project}/00-status.md`** — Project hub with "Agent use:" TL;DR
-4. **`vault/Databases/Projects/{project}/PROJECT.md`** — Project-specific context (if exists)
+2. **`vault/Databases/Projects/{project}/00-status.md`** — Project hub with "Agent use:" TL;DR
+3. **`vault/Databases/Projects/{project}/PROJECT.md`** — Project-specific context (if exists)
 
 ### Path Prefix
 
