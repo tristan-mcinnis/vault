@@ -167,15 +167,18 @@ Note: Use relative paths from vault root (without `vault/` prefix).
 
 ### Rule 2: Content Routing
 
-| Content Type | Location | Rationale |
-|--------------|----------|-----------|
-| **Client/team meetings** | `vault/Databases/Meetings/` | Searchable across time & projects |
-| **Research transcripts** | `{project}/transcripts/{type}/` | Project artifact, not general meeting |
-| **Meeting takeaways** | `{project}/meeting-takeaways/` | Project-specific decisions |
+All transcripts (meetings and research) are the same raw material. Route by **processing intent** — what happens next — not by content type.
+
+| Processing Intent | Location | What Happens Next |
+|-------------------|----------|-------------------|
+| **Analyze for research insights** | `{project}/transcripts/consumer/` or `expert/` | → `/transcript-analysis` → `/analysis-op` → `/synthesis` → `/report` |
+| **Summarize for decisions & actions** | `vault/Databases/Meetings/` | → `/meeting` → takeaways extracted → project status updated |
+| **Extracted decisions/actions** | `{project}/meeting-takeaways/` | Reference artifact, already processed |
 
 Decision tree:
-- **Is it a meeting with colleagues/clients?** → `vault/Databases/Meetings/`
-- **Is it a research interview transcript?** → `{project}/transcripts/consumer/` or `expert/`
+- **What happens next with this transcript?**
+  - **It gets analyzed for research insights** (consumer behavior, brand perception, market dynamics) → `{project}/transcripts/consumer/` or `expert/`
+  - **It gets summarized for decisions, actions, and status updates** (internal alignment, client feedback, project planning) → `vault/Databases/Meetings/`
 - **Are you extracting decisions/actions from a meeting?** → `{project}/meeting-takeaways/`
 
 ### Rule 3: Source Tracking

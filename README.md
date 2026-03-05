@@ -147,10 +147,10 @@ Meeting → Project → Client
 Artifacts  Documents
 ```
 
-Bidirectional links are enforced: when a meeting is linked to a project, both files are updated. Content routing follows clear rules:
-- Client/team meetings → `vault/Databases/Meetings/`
-- Research transcripts → `{project}/transcripts/consumer/` or `expert/`
-- Meeting decisions → `{project}/meeting-takeaways/`
+Bidirectional links are enforced: when a meeting is linked to a project, both files are updated. Content is routed by **processing intent** — what happens next, not what it "is":
+- **Analyze for research insights** → `{project}/transcripts/consumer/` or `expert/` (feeds into analysis pipeline)
+- **Summarize for decisions & actions** → `vault/Databases/Meetings/` (feeds into meeting processing)
+- **Extracted decisions** → `{project}/meeting-takeaways/`
 
 ### 6. Knowledge Base
 
